@@ -1,0 +1,68 @@
+name: Continuous Integration and Delivery
+
+on: [push]
+
+jobs:
+
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+
+      - name: Add .local/bin to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Docker meta
+        id: docker_meta_backend
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/grahame/fristad
+
+      - name: Upgrade pip (python)
+        run: |
+          pip3 install -U pip setuptools
+
+      - name: Install poetry (python)
+        run: |
+          pip3 install -U poetry
+
+      - name: Lint (Python)
+        run: |
+          poetry install
+          poetry run black --check .
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to GitHub Container Registry (backend)
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta_backend.outputs.tags }}
+          labels: ${{ steps.docker_meta_backend.outputs.labels }}

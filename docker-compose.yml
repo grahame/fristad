@@ -1,0 +1,7 @@
+version: "3"
+services:
+  fristad:
+    build: .
+    volumes:
+      - .:/app:delegated
+      - ./config/:/config/

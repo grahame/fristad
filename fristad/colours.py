@@ -1,0 +1,6 @@
+green = "186420"
+red = "d80707"
+white = "ffffff"
+violet = "800080"
+blue = "ff0000"
+pink = "f485ba"
