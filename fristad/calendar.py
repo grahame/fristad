@@ -120,7 +120,7 @@ seasons = [
     Season("lent", violet, d(2022, 3, 2), d(2022, 4, 16)),
     Season("easter", white, d(2022, 4, 17), d(2022, 6, 4)),
     Season("pentecost", red, d(2022, 6, 5), d(2022, 6, 11)),
-    Season("advent", blue, d(2022, 11, 27), d(2022, 12, 24)),
+    Season("advent", violet, d(2022, 11, 27), d(2022, 12, 24)),
     Season("christmas", white, d(2022, 12, 25), d(2022, 12, 31)),
 ]
 ordinary = Season("ordinary", green, None, None)
