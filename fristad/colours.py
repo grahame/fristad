@@ -1,5 +1,5 @@
 green = "186420"
 red = "d80707"
 white = "ffffff"
-violet = "800080"
+violet = "4B0082"
 pink = "f485ba"
